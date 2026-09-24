@@ -1,0 +1,21 @@
+services:
+  warehouse:
+    image: postgres:16-alpine
+    container_name: lineagelens-warehouse
+    environment:
+      POSTGRES_USER: lineage
+      POSTGRES_PASSWORD: lineage
+      POSTGRES_DB: warehouse
+    ports:
+      - "5433:5432"
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+      - ./warehouse/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lineage -d warehouse"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  warehouse_data:
