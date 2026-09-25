@@ -32,6 +32,19 @@ python break.py --scenario silent-nulls
 
 ## The pipeline
 
+raw.customers ──► stg_customers ──────────────────────────► dim_customers
+raw.products ──► stg_products ▲
+raw.orders ──► stg_orders ──┐ │
+raw.order_items ► stg_order_items ─┴► int_order_totals ──► int_customer_orders
+│
+raw.payments ──► stg_payments ──► int_payments_by_order │
+│ │
+└──► fct_orders ◄────┘
+│
+┌────────────────┴──────────────────┐
+▼ ▼
+fct_daily_revenue fct_payment_reconciliation
+
 `fct_daily_revenue` is the dashboard number. Every scenario is a different
 reason it might be wrong — or a reason it might be fine.
 
